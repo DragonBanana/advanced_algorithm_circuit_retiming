@@ -27,7 +27,7 @@ outputs. In all cases, if the rules are followed, the circuit will have the same
 as it did before retiming.
 
 # Algorithms 
-This repository contains the implementation of two algorithm: **OPT_1** and **OPT_2**. Both the algorithms are described
+This repository contains a collection of scripts that implements two algorithm: **OPT_1** and **OPT_2**. Both the algorithms are described
 in this [paper](https://cseweb.ucsd.edu/classes/sp17/cse140-a/exam/LeisersonRetiming.pdf).
 Given a Graph with V vertices and E edges, the complexity of OPT_1 is **O(|V|^3 * lg|V|)** and the
 complexity of OPT_2 is **O(|V| \* |E| \* lg|V|)**. So whenever *|E| < |V|^2*, the second algorithm is expected
@@ -57,15 +57,80 @@ This repository uses the following libraries:
 * **pandas**, to handle csv results.
 * **plotly**, to plot the results in nice charts.
 
-## Circuit generator:
+## gen_circuits.py:
 The [gen_circuits.py](gen_circuits.py) contains the functions to generate different types of circuits:
 * N bit correlator.
+    ```python
+    import gen_circuits
+    G = gen_circuits.gen_correlator(4)
+    ```
+    <p align="center">
+      <img width="66%" src="doc/images/correlator_4_bit.png"/>
+    </p>
 * Tree with B branches and D depth.
+    ```python
+    import gen_circuits
+    G = gen_circuits.gen_tree(depth=2, n_branch=2)
+    ```
+    <p align="center">
+      <img width="66%" src="doc/images/bin_tree_2_level.png"/>
+    </p>
 * Close to fully connected graph with N nodes.
+    ```python
+    import gen_circuits
+    G = gen_circuits.gen_tree(nodes=4)
+    ```
+    <p align="center">
+      <img width="66%" src="doc/images/full_graph_4_node.png"/>
+    </p>
 For most of the circuits is possible to choose randomize the delay of each node.
-<p align="center">
-  <img width="50%" src="doc/images/correlator_4_bit.png"/>
-</p>
-<p align="center">
-  <img width="50%" src="doc/images/bin_tree_2_level.png"/>
-</p>
+
+## algorithm.py:
+This script contains the implementation of 5 algorithms described by Charles E. Leiserson and James B. Saxe.
+* **CP**: Given a graph G, for each vertex V, it returns the maximum cost path without registers.
+```python
+import algorithm, gen_circuits
+G = gen_circuits.gen_correlator(4)
+X = algorithm.CP(G)
+# RESULT
+# X: {'vh': 24, 'vcomp_0': 3, 'vcomp_1': 3, 'vcomp_2': 3, 'vcomp_3': 3, 'vsum_0': 10, 'vsum_1': 17, 'vsum_2': 24}
+```
+
+* **WD**: Given a graph G, it uses Floyd-Warshall algorithm to build the W and D matrixes described in the paper.
+```python
+import algorithm, gen_circuits
+G = gen_circuits.gen_correlator(4)
+W, D = algorithm.WD(G)
+# RESULT
+# W: matrix([[0, 1, 2, 3, 4, 3, 2, 1],
+#            [0, 0, 1, 2, 3, 2, 1, 0],
+#            [0, 1, 0, 1, 2, 1, 0, 0],
+#            [0, 1, 2, 0, 1, 0, 0, 0],
+#            [0, 1, 2, 3, 0, 0, 0, 0],
+#            [0, 1, 2, 3, 4, 0, 0, 0],
+#            [0, 1, 2, 3, 4, 3, 0, 0],
+#            [0, 1, 2, 3, 4, 3, 2, 0]])
+```
+
+* **OPT_1**: Given a graph G, a matrix W and a matrix D. It returns a retimed graph with minimum legal clock.
+```python
+import algorithm, gen_circuits
+G = gen_circuits.gen_correlator(4)
+W, D = algorithm.WD(G)
+retimed_G = algorithm.OPT_1(G, W, D)
+```
+
+* **FEAS**: Given a graph G and a clock C, it returns a retimed graph with legal clock C if feasible. Otherwise None.
+```python
+import algorithm, gen_circuits
+G = gen_circuits.gen_correlator(4)
+retimed_G = algorithm.FEAS(G, 14)
+```
+
+* **OPT_1**: Given a graph G and a matrix D. It returns a retimed graph with minimum legal clock.
+```python
+import algorithm, gen_circuits
+G = gen_circuits.gen_correlator(4)
+W, D = algorithm.WD(G)
+retimed_G = algorithm.OPT_1(G, D)
+```
