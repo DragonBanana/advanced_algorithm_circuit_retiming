@@ -160,7 +160,7 @@ Those benchmarks have been run on a Intel Xeon 2670 CPU.
 
 ## Time benchmark
 The script [time_parallel_benchmark.py](time_parallel_benchmark.py) runs OPT_1 and OPT_2 on different circuits.
-For each circuit, the algorithm is run 20 times in order to have a more stable result.
+For each circuit, the algorithm is run **20 times** in order to have a more stable result.
 Before running the benchmark we expect that eventually circuits that have **E (Edges) < V^2 (Vertices)** performs better
 with OPT_2 rather than with OPT_1.
 
@@ -234,7 +234,7 @@ and more time is been needed for OPT 2.
 As expected, OPT 2 scales very well with the number of edges (the color of the biggest bubble is purple),
 and increasing the number of edges (close to (V^2)/2 ), the performance starts to decrease rapidly.
 
-The interactive plot can be found [here](doc/html/time_bench.html)
+The interactive plot can be found [here](doc/html/time_bench.html) (it requires to be opened with a browser/HTML reader).
 <p align="center">
   <img width="80%" src="doc/images/time_bench.png"/>
 </p>
@@ -246,6 +246,25 @@ garbage collected language, and the measurement has been done through
 [psutil](https://pypi.org/project/psutil/).
 The script responsible of the memory benchmark is [mem_parallel_benchamrk.py](mem_parallel_benchmark.py) and the memory
 usage is been monitored with an interval of *10ns*.
+The script monitors only the amount of memory needed to run the algorithm (so the memory needed for the graph has been
+excluded).
+The following table reports only the max memory consumption (in MB) of the large circuits:
+
+|Circuit name     |Vertices|Edges|Memory Opt 1     |Memory Opt 2     |
+|-----------------|--------|-----|-----------------|-----------------|
+|Full graph 120 nodes|121     |7142 |0.25             |0.25             |
+|Full graph 20 nodes random_delays|21      |192  |0.25             |0.25             |
+|Full graph 40 nodes random_delays|41      |782  |0.25             |0.25             |
+|Tree n_branch 1 depth 180 random_delays|182     |182  |1.22265625       |0.6328125        |
+|Full graph 140 nodes random_delays|141     |9732 |1.84375          |1.7109375        |
+|Full graph 140 nodes|141     |9732 |2.8515625        |1.890625         |
+|Full graph 160 nodes random_delays|161     |12722|4.89453125       |2.78125          |
+|Full graph 160 nodes|161     |12722|5.0625           |3.31640625       |
+|Full graph 180 nodes random_delays|181     |16112|6.9453125        |4.49609375       |
+|Full graph 180 nodes|181     |16112|7.96484375       |4.08203125       |
+|Tree n_branch 4 depth 4 random_delays|342     |597  |35.4140625       |3.5              |
+|Tree n_branch 4 depth 4|342     |597  |40.6171875       |1.6640625        |
+
 
 # Author
 * [Davide Yi Xian Hu](https://github.com/DragonBanana)
