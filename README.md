@@ -177,10 +177,13 @@ The followings bubble charts (generated with the script [plot.py](plot.py)) high
 bubble represents the time used with OPT 1 and the color represents the time taken by OPT 2. 
 So the bigger is the bubble and more time is been required for OPT 1 to complete, and more *'yellowish'* is the bubble
 and more time is been needed for OPT 2.
+<<<<<<< HEAD
 The interactive plot can be found [here]()
 <p align="center">
   <img width="80%" src="doc/images/time_bench.png"/>
 </p>
+=======
+>>>>>>> dev
 
 ## Memory benchmark
 This section reports the memory consumed by the algorithms. I do not think the report is very detailed since Python is a
@@ -189,6 +192,9 @@ garbage collected language, and the measurement has been done through
 [psutil](https://pypi.org/project/psutil/).
 The script responsible of the memory benchmark is [mem_parallel_benchamrk.py](mem_parallel_benchmark.py) and the memory
 usage is been monitored with an interval of *10ns*.
+<<<<<<< HEAD
 
 # Author
 * [Davide Yi Xian Hu](https://github.com/DragonBanana)
+=======
+>>>>>>> dev
