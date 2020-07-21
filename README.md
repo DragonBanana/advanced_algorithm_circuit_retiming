@@ -12,6 +12,8 @@
 * [Introduction](#Introduction)
 * [Algorithms](#Algorithms)
 * [Documentation](#Documentation)
+* [Testing](#Testing)
+* [Benchmark](#Benchmark)
 
 # Introduction
 [Retiming](https://www.wikiwand.com/en/Retiming) is the technique of moving the structural location of latches or registers in a digital circuit to improve its 
@@ -58,7 +60,7 @@ This repository uses the following libraries:
 * **plotly**, to plot the results in nice charts.
 
 ## gen_circuits.py:
-The [gen_circuits.py](gen_circuits.py) contains the functions to generate different types of circuits:
+The [gen_circuits.py](gen_circuits.py) script contains the functions to generate different types of circuits:
 * N bit correlator.
     ```python
     import gen_circuits
@@ -86,7 +88,7 @@ The [gen_circuits.py](gen_circuits.py) contains the functions to generate differ
 For most of the circuits is possible to choose randomize the delay of each node.
 
 ## algorithm.py:
-This script contains the implementation of 5 algorithms described by Charles E. Leiserson and James B. Saxe.
+The [algorithm.py](algorithm.py) script contains the implementation of 5 algorithms described by Charles E. Leiserson and James B. Saxe.
 * **CP**: Given a graph G, for each vertex V, it returns the maximum cost path without registers.
 ```python
 import algorithm, gen_circuits
@@ -127,10 +129,66 @@ G = gen_circuits.gen_correlator(4)
 retimed_G = algorithm.FEAS(G, 14)
 ```
 
-* **OPT_1**: Given a graph G and a matrix D. It returns a retimed graph with minimum legal clock.
+* **OPT_2**: Given a graph G and a matrix D. It returns a retimed graph with minimum legal clock.
 ```python
 import algorithm, gen_circuits
 G = gen_circuits.gen_correlator(4)
 W, D = algorithm.WD(G)
 retimed_G = algorithm.OPT_1(G, D)
 ```
+
+# Testing
+The testing part of the project has been done using the circuits generated with _gen_circuits.py_. Furthermore, OPT_1 
+and OPT_2 best clock results are compared and it is checked that they are equal.
+The script responsible for the testing is [test.py](test.py).
+
+* **Correlator N bit**:
+Given a correlator circuit we know that a minimum clock retiming period of 14 is always possible.
+
+* **Tree with B branches and D depth**:
+Given a tree with B branches and D depth, we know that the minimum achievable clock is max(nodes_delay).
+
+* **Graph N nodes**:
+Given a graph with N nodes half connected, we know that the clock is max(nodes_delay).
+This result is obtained by having a register in each edge of the graph.
+
+# Benchmark
+This section contains the benchmark of the two algorithms. It is composed by two subsections: the first one
+is related to the time needed to compute the minimum clock and the second one reports the memory consumed.
+
+Those benchmarks have been run on a Intel Xeon 2670 CPU.
+
+## Time benchmark
+The script [time_parallel_benchmark.py](time_parallel_benchmark.py) runs OPT_1 and OPT_2 on different circuits.
+For each circuit, the algorithm is run 20 times in order to have a more stable result.
+Before running the benchmark we expect that eventually circuits that have **E (Edges) < V^2 (Vertices)** performs better
+with OPT_2 rather than with OPT_1.
+
+#### Correlator data
+
+#### Tree data
+
+#### Graph data
+
+#### OPT 1 vs OPT 2
+In this chart the two algorithm are compared. In particular, the aim is to show that OPT 2 outperforms OPT 1 when
+we the circuits have a small amount of edges.
+The followings bubble charts (generated with the script [plot.py](plot.py)) highlight this behavior. The size of the 
+bubble represents the time used with OPT 1 and the color represents the time taken by OPT 2. 
+So the bigger is the bubble and more time is been required for OPT 1 to complete, and more *'yellowish'* is the bubble
+and more time is been needed for OPT 2.
+The interactive plot can be found [here]()
+<p align="center">
+  <img width="80%" src="doc/images/time_bench.png"/>
+</p>
+
+## Memory benchmark
+This section reports the memory consumed by the algorithms. I do not think the report is very detailed since Python is a
+garbage collected language, and the measurement has been done through 
+[memory profiler](https://pypi.org/project/memory-profiler/) that under the hood uses 
+[psutil](https://pypi.org/project/psutil/).
+The script responsible of the memory benchmark is [mem_parallel_benchamrk.py](mem_parallel_benchmark.py) and the memory
+usage is been monitored with an interval of *10ns*.
+
+# Author
+* [Davide Yi Xian Hu](https://github.com/DragonBanana)
