@@ -165,10 +165,63 @@ Before running the benchmark we expect that eventually circuits that have **E (E
 with OPT_2 rather than with OPT_1.
 
 #### Correlator data
+|Circuit name     |Vertices|Edges|Opt 1 time       |Opt 2 time       |
+|-----------------|--------|-----|-----------------|-----------------|
+|Correlator 5 bit |10      |14   |0.063            |0.018            |
+|Correlator 10 bit|20      |29   |0.738            |0.077            |
+|Correlator 15 bit|30      |44   |4.600            |0.347            |
+|Correlator 20 bit|40      |59   |14.479           |0.673            |
+|Correlator 25 bit|50      |74   |39.165           |0.556            |
+|Correlator 30 bit|60      |89   |75.612           |0.819            |
+|Correlator 35 bit|70      |104  |125.030          |1.057            |
 
 #### Tree data
+N branches = 1 (so it is a list of vertices having 1 input edge and 1 output edge).
+
+|Circuit name     |Vertices|Edges|Opt 1 time       |Opt 2 time       |
+|-----------------|--------|-----|-----------------|-----------------|
+|Tree n_branch 1 depth 20 random_delays|22      |22   |0.302            |0.122            |
+|Tree n_branch 1 depth 40 random_delays|42      |42   |3.787            |0.954            |
+|Tree n_branch 1 depth 60 random_delays|62      |62   |9.948            |2.192            |
+|Tree n_branch 1 depth 80 random_delays|82      |82   |12.408           |2.116            |
+|Tree n_branch 1 depth 100 random_delays|102     |102  |41.434           |3.556            |
+|Tree n_branch 1 depth 120 random_delays|122     |122  |48.470           |9.729            |
+|Tree n_branch 1 depth 140 random_delays|142     |142  |119.889          |7.453            |
+|Tree n_branch 1 depth 160 random_delays|162     |162  |144.826          |9.371            |
+|Tree n_branch 1 depth 180 random_delays|182     |182  |205.978          |11.889           |
+
+N branches > 1
+
+|Circuit name     |Vertices|Edges|Opt 1 time       |Opt 2 time       |
+|-----------------|--------|-----|-----------------|-----------------|
+|Tree n_branch 2 depth 1 random_delays|4       |5    |0.003            |0.003            |
+|Tree n_branch 2 depth 2 random_delays|8       |11   |0.023            |0.030            |
+|Tree n_branch 2 depth 3 random_delays|16      |23   |0.212            |0.120            |
+|Tree n_branch 2 depth 4 random_delays|32      |47   |1.830            |0.497            |
+|Tree n_branch 3 depth 1 random_delays|5       |7    |0.008            |0.007            |
+|Tree n_branch 3 depth 2 random_delays|14      |22   |0.185            |0.094            |
+|Tree n_branch 3 depth 3 random_delays|41      |67   |3.777            |0.690            |
+|Tree n_branch 3 depth 4 random_delays|122     |202  |48.047           |4.397            |
+|Tree n_branch 4 depth 1 random_delays|6       |9    |0.013            |0.012            |
+|Tree n_branch 4 depth 2 random_delays|22      |37   |0.573            |0.233            |
+|Tree n_branch 4 depth 3 random_delays|86      |149  |57.330           |3.548            |
+|Tree n_branch 4 depth 4 random_delays|342     |597  |1673.138         |34.680           |
+
 
 #### Graph data
+|Circuit name     |Vertices|Edges|Opt 1 time       |Opt 2 time       |
+|-----------------|--------|-----|-----------------|-----------------|
+|Full graph 20 nodes random_delays|21      |192  |0.272            |0.434            |
+|Full graph 40 nodes random_delays|41      |782  |3.145            |3.566            |
+|Full graph 60 nodes random_delays|61      |1772 |4.635            |4.637            |
+|Full graph 80 nodes random_delays|81      |3162 |19.618           |22.289           |
+|Full graph 100 nodes random_delays|101     |4952 |36.925           |28.343           |
+|Full graph 120 nodes random_delays|121     |7142 |43.694           |42.018           |
+|Full graph 140 nodes random_delays|141     |9732 |79.382           |59.424           |
+|Full graph 160 nodes random_delays|161     |12722|106.434          |92.594           |
+|Full graph 180 nodes random_delays|181     |16112|135.168          |134.733          |
+
+
 
 #### OPT 1 vs OPT 2
 In this chart the two algorithm are compared. In particular, the aim is to show that OPT 2 outperforms OPT 1 when
@@ -177,13 +230,14 @@ The followings bubble charts (generated with the script [plot.py](plot.py)) high
 bubble represents the time used with OPT 1 and the color represents the time taken by OPT 2. 
 So the bigger is the bubble and more time is been required for OPT 1 to complete, and more *'yellowish'* is the bubble
 and more time is been needed for OPT 2.
-<<<<<<< HEAD
-The interactive plot can be found [here]()
+
+As expected, OPT 2 scales very well with the number of edges (the color of the biggest bubble is purple),
+and increasing the number of edges (close to (V^2)/2 ), the performance starts to decrease rapidly.
+
+The interactive plot can be found [here](doc/html/time_bench.html)
 <p align="center">
   <img width="80%" src="doc/images/time_bench.png"/>
 </p>
-=======
->>>>>>> dev
 
 ## Memory benchmark
 This section reports the memory consumed by the algorithms. I do not think the report is very detailed since Python is a
@@ -192,9 +246,6 @@ garbage collected language, and the measurement has been done through
 [psutil](https://pypi.org/project/psutil/).
 The script responsible of the memory benchmark is [mem_parallel_benchamrk.py](mem_parallel_benchmark.py) and the memory
 usage is been monitored with an interval of *10ns*.
-<<<<<<< HEAD
 
 # Author
 * [Davide Yi Xian Hu](https://github.com/DragonBanana)
-=======
->>>>>>> dev
