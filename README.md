@@ -87,6 +87,16 @@ The [gen_circuits.py](gen_circuits.py) script contains the functions to generate
     </p>
 For most of the circuits is possible to choose randomize the delay of each node.
 
+To read a custom dot file it is possible to use the *read_dot* feature provided by the NetworkX library.
+An example of how the dot file should be formatted can be found [here](example.dot)
+```python
+import networkx as nx
+path = "example.dot"
+G = nx.nx_agraph.read_dot(path)
+```
+
+
+
 ## algorithm.py:
 The [algorithm.py](algorithm.py) script contains the implementation of 5 algorithms described by Charles E. Leiserson and James B. Saxe.
 * **CP**: Given a graph G, for each vertex V, it returns the maximum cost path without registers.
