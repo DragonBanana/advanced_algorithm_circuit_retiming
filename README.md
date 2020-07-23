@@ -88,7 +88,7 @@ The [gen_circuits.py](gen_circuits.py) script contains the functions to generate
 For most of the circuits is possible to choose randomize the delay of each node.
 
 To read a custom dot file it is possible to use the *read_dot* feature provided by the NetworkX library.
-An example of how the dot file should be formatted can be found [here](example.dot)
+An example of how the dot file should be formatted can be found [here](example.dot).
 ```python
 import networkx as nx
 path = "example.dot"
