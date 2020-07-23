@@ -33,15 +33,13 @@ def retime_graph(G: nx.DiGraph, r):
     return Gr
 
 def print_graph(G: nx.DiGraph):
-
-
     # Move the registers
     for u, v in list(G.edges):
         print(f"[{u}] -- {G[u][v]['w']} --> [{v}] ")
 
 
 def draw_graph(G: nx.DiGraph):
-    nx.draw(G, pos=nx.circular_layout(G), with_labels=True, font_weight='bold')
+    nx.draw(G, pos=nx.circular_layout(G), with_labels=True)
     nx.draw_networkx_edge_labels(G, pos=nx.circular_layout(G))
     plt.show()
 

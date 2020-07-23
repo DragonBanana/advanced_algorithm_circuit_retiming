@@ -231,7 +231,7 @@ bubble represents the time used with OPT 1 and the color represents the time tak
 So the bigger is the bubble and more time is been required for OPT 1 to complete, and more *'yellowish'* is the bubble
 and more time is been needed for OPT 2.
 
-As expected, OPT 2 scales very well with the number of edges (the color of the biggest bubble is purple),
+As expected, OPT 2 scales very well with the number of vertices (the color of the biggest bubble is purple),
 and increasing the number of edges (close to (V^2)/2 ), the performance starts to decrease rapidly.
 
 The interactive plot can be found [here](doc/html/time_bench.html) (it requires to be opened with a browser/HTML reader).
@@ -248,9 +248,9 @@ The script responsible of the memory benchmark is [mem_parallel_benchamrk.py](me
 usage is been monitored with an interval of *10ns*.
 The script monitors only the amount of memory needed to run the algorithm (so the memory needed for the graph has been
 excluded).
-The following table reports only the max memory consumption (in MB) of the large circuits:
+The following table reports only the max delta memory consumption (in MB) of the large circuits:
 
-|Circuit name     |Vertices|Edges|Memory Opt 1     |Memory Opt 2     |
+|Circuit name     |Vertices|Edges| Δ Memory Opt 1     | Δ Memory Opt 2     |
 |-----------------|--------|-----|-----------------|-----------------|
 |Full graph 120 nodes|121     |7142 |0.25             |0.25             |
 |Full graph 20 nodes random_delays|21      |192  |0.25             |0.25             |
