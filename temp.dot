@@ -1,0 +1,26 @@
+strict digraph "" {
+	vh	 [d=0];
+	vcomp_0	 [d=3];
+	vh -> vcomp_0	 [w=1];
+	vcomp_1	 [d=3];
+	vcomp_0 -> vcomp_1	 [w=1];
+	vsum_3	 [d=7];
+	vcomp_0 -> vsum_3	 [w=0];
+	vcomp_2	 [d=3];
+	vcomp_1 -> vcomp_2	 [w=1];
+	vsum_2	 [d=7];
+	vcomp_1 -> vsum_2	 [w=0];
+	vcomp_3	 [d=3];
+	vcomp_2 -> vcomp_3	 [w=1];
+	vsum_1	 [d=7];
+	vcomp_2 -> vsum_1	 [w=0];
+	vcomp_4	 [d=3];
+	vcomp_3 -> vcomp_4	 [w=1];
+	vsum_0	 [d=7];
+	vcomp_3 -> vsum_0	 [w=0];
+	vcomp_4 -> vsum_0	 [w=0];
+	vsum_0 -> vsum_1	 [w=0];
+	vsum_1 -> vsum_2	 [w=0];
+	vsum_2 -> vsum_3	 [w=0];
+	vsum_3 -> vh	 [w=0];
+}
