@@ -103,6 +103,7 @@ The [algorithm.py](algorithm.py) script contains the implementation of 5 algorit
 ```python
 import algorithm, gen_circuits
 G = gen_circuits.gen_correlator(4)
+G = graph_utils.preprocess(G)
 X = algorithm.CP(G)
 # RESULT
 # X: {'vh': 24, 'vcomp_0': 3, 'vcomp_1': 3, 'vcomp_2': 3, 'vcomp_3': 3, 'vsum_0': 10, 'vsum_1': 17, 'vsum_2': 24}
@@ -112,6 +113,7 @@ X = algorithm.CP(G)
 ```python
 import algorithm, gen_circuits
 G = gen_circuits.gen_correlator(4)
+G = graph_utils.preprocess(G)
 W, D = algorithm.WD(G)
 # RESULT
 # W: matrix([[0, 1, 2, 3, 4, 3, 2, 1],
@@ -128,6 +130,7 @@ W, D = algorithm.WD(G)
 ```python
 import algorithm, gen_circuits
 G = gen_circuits.gen_correlator(4)
+G = graph_utils.preprocess(G)
 W, D = algorithm.WD(G)
 retimed_G = algorithm.OPT_1(G, W, D)
 ```
@@ -136,6 +139,7 @@ retimed_G = algorithm.OPT_1(G, W, D)
 ```python
 import algorithm, gen_circuits
 G = gen_circuits.gen_correlator(4)
+G = graph_utils.preprocess(G)
 retimed_G = algorithm.FEAS(G, 14)
 ```
 
@@ -143,6 +147,7 @@ retimed_G = algorithm.FEAS(G, 14)
 ```python
 import algorithm, gen_circuits
 G = gen_circuits.gen_correlator(4)
+G = graph_utils.preprocess(G)
 W, D = algorithm.WD(G)
 retimed_G = algorithm.OPT_1(G, D)
 ```
