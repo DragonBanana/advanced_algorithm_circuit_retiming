@@ -124,83 +124,87 @@ def OPT_1(G: nx.DiGraph, W: np.matrix, D: np.matrix, verbose=False):
     binary_search_index = binary_search_step
 
     # Binary search
-    while binary_search_step >= 0.1:
-        r = {}
+    for _ in range(math.ceil(math.log2(binary_search_array.size)) + 1):
+
+        # Check exit condition:
+        if binary_search_index >= len(binary_search_array) or binary_search_index < 0:
+            break
+
         # Retrieve a clock and try it if feasible
         c = binary_search_array[binary_search_index]
-        # c = 10
-        # Retrieve the index of the path with delay greater than c
-        indices = np.where(D > c, D, 0).nonzero()
+
+        if c not in tested_c:
+            # c = 10
+            # Retrieve the index of the path with delay greater than c
+            indices = np.where(D > c, D, 0).nonzero()
 
 
-        # Create a graph to solve the ILP
-        bellman_ford_solver_graph = nx.DiGraph()
+            # Create a graph to solve the ILP
+            bellman_ford_solver_graph = nx.DiGraph()
 
 
-        # Add constraints
-        for x, y in zip(indices[0], indices[1]):
-            u = node_names[x]
-            v = node_names[y]
-            w = W[x, y] - 1
-            # print(f"{x} - {y} <= {w}")
-            if bellman_ford_solver_graph.has_edge(v,u):
-                if bellman_ford_solver_graph[v][u]['w'] > w:
-                    bellman_ford_solver_graph[v][u]['w'] = w
-            else:
-                bellman_ford_solver_graph.add_edge(v, u, w=w)
+            # Add constraints
+            for x, y in zip(indices[0], indices[1]):
+                u = node_names[x]
+                v = node_names[y]
+                w = W[x, y] - 1
+                # print(f"{x} - {y} <= {w}")
+                if bellman_ford_solver_graph.has_edge(v,u):
+                    if bellman_ford_solver_graph[v][u]['w'] > w:
+                        bellman_ford_solver_graph[v][u]['w'] = w
+                else:
+                    bellman_ford_solver_graph.add_edge(v, u, w=w)
 
-        # Add constraints
-        for nodes, edge_property in G.edges.items():
-            u = nodes[0]
-            v = nodes[1]
-            w = edge_property['w']
-            # print(f"{u} - {v} <= {w}")
-            if bellman_ford_solver_graph.has_edge(v,u):
-                if bellman_ford_solver_graph[v][u]['w'] > w:
-                    bellman_ford_solver_graph[v][u]['w'] = w
-            else:
-                bellman_ford_solver_graph.add_edge(v, u, w=w)
+            # Add constraints
+            for nodes, edge_property in G.edges.items():
+                u = nodes[0]
+                v = nodes[1]
+                w = edge_property['w']
+                # print(f"{u} - {v} <= {w}")
+                if bellman_ford_solver_graph.has_edge(v,u):
+                    if bellman_ford_solver_graph[v][u]['w'] > w:
+                        bellman_ford_solver_graph[v][u]['w'] = w
+                else:
+                    bellman_ford_solver_graph.add_edge(v, u, w=w)
 
-        # print(len(G.edges))
-        # print(len(indices[0]))
-        # print(len(bellman_ford_solver_graph.edges))
+            # print(len(G.edges))
+            # print(len(indices[0]))
+            # print(len(bellman_ford_solver_graph.edges))
 
-        # graph_utils.print_graph(bellman_ford_solver_graph)
-        bellman_ford_solver_graph.add_node('root_node')
-        for node in G.nodes:
-            bellman_ford_solver_graph.add_edge('root_node', node, w=0)
-        # break
-        # graph_utils.draw_graph(bellman_ford_solver_graph)
-        tested_c.add(c)
-
-        # Solve the graph
-        is_feasible = True
-        try:
+            # graph_utils.print_graph(bellman_ford_solver_graph)
+            bellman_ford_solver_graph.add_node('root_node')
+            for node in G.nodes:
+                bellman_ford_solver_graph.add_edge('root_node', node, w=0)
+            # break
             # graph_utils.draw_graph(bellman_ford_solver_graph)
-            r = nx.single_source_bellman_ford_path_length(bellman_ford_solver_graph, 'root_node', weight='w')
-            # print(r)
-        except nx.NetworkXUnbounded:
-            is_feasible = False
+            tested_c.add(c)
 
-        if verbose:
-            print(f"Clock {c} {'is' if is_feasible else 'is NOT'} feasible")
+            # Solve the graph
+            is_feasible = True
+            try:
+                # graph_utils.draw_graph(bellman_ford_solver_graph)
+                r = nx.single_source_bellman_ford_path_length(bellman_ford_solver_graph, 'root_node', weight='w')
+                # print(r)
+            except nx.NetworkXUnbounded:
+                is_feasible = False
 
-        if is_feasible:
-            if best_c > c:
-                best_c = c
-                best_r = r
+            if verbose:
+                print(f"Clock {c} {'is' if is_feasible else 'is NOT'} feasible")
+
+            if is_feasible:
+                if best_c > c:
+                    best_c = c
+                    best_r = r
+
+        else:
+            is_feasible = c >= best_c
 
         # Move the index
-        while binary_search_array[binary_search_index] in tested_c:
-            binary_search_step = binary_search_step / 2
-            if is_feasible:
-                binary_search_index = binary_search_index - math.ceil(binary_search_step)
-            else:
-                binary_search_index = binary_search_index + math.ceil(binary_search_step)
-            if binary_search_index >= len(binary_search_array) or binary_search_index < 0:
-                break
-        if binary_search_index >= len(binary_search_array) or binary_search_index < 0 or binary_search_array[binary_search_index] in tested_c or binary_search_array[binary_search_index] > best_c:
-            break
+        binary_search_step = binary_search_step / 2
+        if is_feasible:
+            binary_search_index = binary_search_index - math.ceil(binary_search_step)
+        else:
+            binary_search_index = binary_search_index + math.ceil(binary_search_step)
     Gr = graph_utils.retime_graph(G, best_r)
 
     return Gr
@@ -239,34 +243,40 @@ def OPT_2(G: nx.DiGraph, D: np.matrix, verbose=False):
     Gr = copy.deepcopy(G)
 
     # Binary search
-    while binary_search_step >= 0.1:
+    for _ in range(math.ceil(math.log2(binary_search_array.size)) + 1):
+
+        # Check exit condition:
+        if binary_search_index >= len(binary_search_array) or binary_search_index < 0:
+            break
 
         # Retrieve a clock and try it if feasible
         c = binary_search_array[binary_search_index]
-        FEAS_result = FEAS(G, c)
 
-        # Solve the graph
-        is_feasible = FEAS_result is not None
+        if c not in tested_c:
 
-        if verbose:
-            print(f"Clock {c} {'is' if is_feasible else 'is NOT'} feasible")
-        tested_c.add(c)
+            FEAS_result = FEAS(G, c)
 
-        if is_feasible:
-            if best_c > c:
-                best_c = c
-                Gr = FEAS_result
+            # Solve the graph
+            is_feasible = FEAS_result is not None
+
+            if verbose:
+                print(f"Clock {c} {'is' if is_feasible else 'is NOT'} feasible")
+            tested_c.add(c)
+
+            if is_feasible:
+                if best_c > c:
+                    best_c = c
+                    Gr = FEAS_result
+
+        else:
+            is_feasible = c >= best_c
 
         # Move the index
-        while binary_search_array[binary_search_index] in tested_c:
-            binary_search_step = binary_search_step / 2
-            if is_feasible:
-                binary_search_index = binary_search_index - math.ceil(binary_search_step)
-            else:
-                binary_search_index = binary_search_index + math.ceil(binary_search_step)
-            if binary_search_index >= len(binary_search_array) or binary_search_index < 0:
-                break
-        if binary_search_index >= len(binary_search_array) or binary_search_index < 0 or binary_search_array[binary_search_index] in tested_c or binary_search_array[binary_search_index] > best_c:
-            break
+        binary_search_step = binary_search_step / 2
+        if is_feasible:
+            binary_search_index = binary_search_index - math.ceil(binary_search_step)
+        else:
+            binary_search_index = binary_search_index + math.ceil(binary_search_step)
+
 
     return Gr
