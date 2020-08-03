@@ -23,7 +23,7 @@ def WD(G: nx.DiGraph):
         def __le__(self, other):
             if self.w < other.w:
                 return True
-            elif self.w == other.w and self.d >= other.d:
+            elif self.w == other.w and self.d > other.d:
                 return True
             else:
                 return False
@@ -124,7 +124,7 @@ def OPT_1(G: nx.DiGraph, W: np.matrix, D: np.matrix, verbose=False):
     binary_search_index = binary_search_step
 
     # Binary search
-    while binary_search_step >= 0.25:
+    while binary_search_step >= 0.1:
         r = {}
         # Retrieve a clock and try it if feasible
         c = binary_search_array[binary_search_index]
@@ -191,7 +191,7 @@ def OPT_1(G: nx.DiGraph, W: np.matrix, D: np.matrix, verbose=False):
                 best_r = r
 
         # Move the index
-        if binary_search_array[binary_search_index] in tested_c:
+        while binary_search_array[binary_search_index] in tested_c:
             binary_search_step = binary_search_step / 2
             if is_feasible:
                 binary_search_index = binary_search_index - math.ceil(binary_search_step)
@@ -239,7 +239,7 @@ def OPT_2(G: nx.DiGraph, D: np.matrix, verbose=False):
     Gr = copy.deepcopy(G)
 
     # Binary search
-    while binary_search_step >= 0.25:
+    while binary_search_step >= 0.1:
 
         # Retrieve a clock and try it if feasible
         c = binary_search_array[binary_search_index]
