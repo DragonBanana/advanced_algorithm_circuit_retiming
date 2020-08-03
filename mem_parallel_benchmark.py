@@ -52,28 +52,28 @@ def single_run(G, run_name):
 runs = []
 
 # Test the correlator
-for i in range(2, 6):
+for i in range(2, 5):
     for j in range(1, 5):
         G = gen_circuits.gen_tree(n_branch=i, depth=j)
         G = graph_utils.preprocess(G)
         runs += [(G, f"Tree n_branch {i} depth {j}")]
 
 # Test the correlator
-for i in range(2, 6):
+for i in range(2, 5):
     for j in range(1, 5):
-        G = gen_circuits.gen_tree(n_branch=i, depth=j, random_delays=True)
+        G = gen_circuits.gen_tree(n_branch=i, depth=j, delay=100, random_delays=True)
         G = graph_utils.preprocess(G)
         runs += [(G, f"Tree n_branch {i} depth {j} random_delays")]
 
 # Test the correlator
-for j in range(50, 300, 50):
+for j in range(20, 200, 20):
     G = gen_circuits.gen_tree(n_branch=1, depth=j)
     G = graph_utils.preprocess(G)
     runs += [(G, f"Tree n_branch {1} depth {j}")]
 
 # Test the correlator
-for j in range(50, 300, 50):
-    G = gen_circuits.gen_tree(n_branch=1, depth=j, random_delays=True)
+for j in range(20, 200, 20):
+    G = gen_circuits.gen_tree(n_branch=1, depth=j, delay=100, random_delays=True)
     G = graph_utils.preprocess(G)
     runs += [(G, f"Tree n_branch {1} depth {j} random_delays")]
 
@@ -91,7 +91,7 @@ for i in range(20, 200, 20):
 
 # Test the correlator
 for i in range(20, 200, 20):
-    G = gen_circuits.gen_full_graph(i, random_delays=True)
+    G = gen_circuits.gen_full_graph(i, delay=100, random_delays=True)
     G = graph_utils.preprocess(G)
     runs += [(G, f"Full graph {i} nodes random_delays")]
 

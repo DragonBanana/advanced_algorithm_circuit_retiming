@@ -35,6 +35,12 @@ Given a Graph with V vertices and E edges, the complexity of OPT_1 is **O(|V|^3 
 complexity of OPT_2 is **O(|V| \* |E| \* lg|V|)**. So whenever *|E| < |V|^2*, the second algorithm is expected
 to eventually have better performance.
 
+### Run the algorithms
+In order to run the algorithms use the following scripts:
+```shell script
+python3 opt1.py --input example.dot --output retimed_example.dot --verbose True
+python3 opt2.py --input example.dot --output retimed_example.dot --verbose True
+```
 # Documentation
 The implementation of circuit retiming has been done in Python.
 

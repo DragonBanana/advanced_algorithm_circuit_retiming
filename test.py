@@ -40,7 +40,7 @@ for i in range(6, 50):
     file.write(f"Correlator {i} bit, {nodes}, {edges}, {clock}, {t_1}, {t_2}\n")
     file.flush()
 
-# Test the correlator
+# Test the graph
 for i in range(10, 500, 5):
     G = gen_circuits.gen_full_graph(i)
     G = graph_utils.preprocess(G)
@@ -48,7 +48,7 @@ for i in range(10, 500, 5):
     file.write(f"Full graph {i} nodes, {nodes}, {edges}, {clock}, {t_1}, {t_2}\n")
     file.flush()
 
-# Test the correlator
+# Test the tree
 for i in range(1, 8):
     for j in range(1, 8):
         G = gen_circuits.gen_tree(n_branch=i, depth=j)

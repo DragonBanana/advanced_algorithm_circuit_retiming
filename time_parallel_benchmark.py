@@ -61,7 +61,7 @@ for i in range(2, 5):
         runs += [(G, f"Tree n_branch {i} depth {j} random_delays")]
 
 # Test the correlator
-for j in range(50, 300, 50):
+for j in range(20, 200, 20):
     G = gen_circuits.gen_tree(n_branch=1, depth=j)
     G = graph_utils.preprocess(G)
     runs += [(G, f"Tree n_branch {1} depth {j}")]

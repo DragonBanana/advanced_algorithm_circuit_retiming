@@ -1,3 +1,5 @@
+import copy
+
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,7 +10,7 @@ import algorithm
 def preprocess(G: nx.DiGraph):
 
     # Clone graph G
-    G = G.copy()
+    G = copy.deepcopy(G)
 
     # Preprocess the data
     for edge_key, edge_property in G.edges.items():
@@ -24,7 +26,7 @@ def preprocess(G: nx.DiGraph):
 def retime_graph(G: nx.DiGraph, r):
 
     # Clone the graph
-    Gr = G.copy()
+    Gr = copy.deepcopy(G)
     # Move the registers
     for u, v in list(G.edges):
         Gr[u][v]['w'] = G[u][v]['w'] + r[v] - r[u]
@@ -34,7 +36,7 @@ def retime_graph(G: nx.DiGraph, r):
 
 def print_graph(G: nx.DiGraph):
     # Move the registers
-    for u, v in list(G.edges):
+    for u, v in sorted(list(G.edges)):
         print(f"[{u}] -- {G[u][v]['w']} --> [{v}] ")
 
 
@@ -44,8 +46,8 @@ def draw_graph(G: nx.DiGraph):
     plt.show()
 
 
-def save_graph(G):
-    nx.nx_agraph.write_dot(G, "temp.dot")
+def save_graph(G, filename="example.dot"):
+    nx.nx_agraph.write_dot(G, filename)
 
 def graph_stats(G):
     n_nodes = len(G.nodes)
