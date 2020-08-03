@@ -1,16 +1,14 @@
 import os
 from random import randint
-
 import networkx as nx
 from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
-
 import algorithm
 import graph_utils
 
-n_graphs = 100
-n_nodes = 20
-k_out = 10
+n_graphs = 1000
+n_nodes = 25
+k_out = 15
 max_delay = 10000
 count_file = open("count_registers.csv", 'w+')
 count_file.write("filename, nodes, edges, opt_1 registers, opt_2 registers\n")
@@ -67,9 +65,9 @@ def calc_graph(random_seed):
     count_2 = count_registers(Gr)
     clock_2 = max(algorithm.CP(Gr).values())
     nodes, edges, clock = graph_utils.graph_stats(Gr)
-    assert clock_1 == clock_2
+    # assert clock_1 == clock_2, f"{clock_1}, {clock_2}, {random_seed}"
     count_file.write(f"{path}, {nodes}, {edges}, {count_1}, {count_2}\n")
     count_file.flush()
 
-process_map(gen_graph, list(range(n_graphs)), max_workers=8)
+# process_map(gen_graph, list(range(n_graphs)), max_workers=8)
 process_map(calc_graph, list(range(n_graphs)), max_workers=8)
